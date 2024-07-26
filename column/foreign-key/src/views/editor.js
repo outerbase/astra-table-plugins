@@ -32,8 +32,6 @@ templateEditor_$PLUGIN_ID.innerHTML = `
 
     #top {
         padding: 20px;
-        /* flex: 1; */
-        /* overflow-y: scroll; */
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -159,7 +157,6 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
         element.classList.remove("dark")
         element.classList.add(this.config.theme);
 
-        // Change `#view-table` theme attribute
         this.shadow.querySelector('#view-table').setAttribute("theme", this.config.theme)
     }
     
@@ -198,9 +195,6 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
             return
         }
 
-        // let fkName = ""
-        // let fkTable = ""
-        // let fkSchema = ""
         let cellValue = this.getAttribute('cellValue')
 
         // Loop through `constraints` and find where type === `FOREIGN KEY`
@@ -236,7 +230,7 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
             let items = []
 
             for (const key in item) {
-                items.push(this.createItem("text", key, item[key]))
+                items.push(this.createItem(key, item[key]))
             }
 
             items.forEach(item => top.appendChild(item))
@@ -244,11 +238,7 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
             
     }
 
-    render() {
-        
-    }
-
-    createItem(type, title, value) {
+    createItem(title, value) {
         let item = document.createElement("div")
         item.classList.add("item")
 

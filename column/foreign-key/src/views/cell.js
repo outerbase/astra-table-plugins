@@ -68,15 +68,14 @@ templateCell_$PLUGIN_ID.innerHTML = `
     }
 
     .null-placeholder {
-        position: absolute;
         top: 18px;
         left: 18px;
         pointer-events: none;
-        color: #a3a3a3;
+        color: #a3a3a3 !important;
     }
 
     .dark .null-placeholder {
-        color: #525252;
+        color: #525252 !important;
     }
 </style>
 
