@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Playground</title>
+
+    <script src="astra.js"></script>
+    <script src="plugin.js"></script>
+    <script src="data.js"></script>
+</head>
+
+<body>
+    <astra-table
+        schema=''
+        data=''
+        theme="light"
+        keyboard-shortcuts
+        selectable-rows
+        outer-border
+        blank-fill
+    ></astra-table>
+</body>
+
+<script>
+    const table = document.querySelector('astra-table');
+    table.data = window.data;
+    table.schema = window.schema;
+</script>
+
+</html>

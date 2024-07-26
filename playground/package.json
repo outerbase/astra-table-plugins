@@ -1,0 +1,16 @@
+{
+    "name": "astra-table-plugins-playground",
+    "version": "1.0.0",
+    "description": "Playground for testing plugins",
+    "main": "index.js",
+    "scripts": {
+        "cli-plugin-test": "outerbase plugin test"
+    },
+    "keywords": [],
+    "author": "Outerbase, Inc.",
+    "license": "ISC",
+    "devDependencies": {
+        
+    }
+  }
+  

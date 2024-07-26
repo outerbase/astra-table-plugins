@@ -103,8 +103,8 @@ def create_plugin(template_path):
     if config_response == 'Y':
         include_configuration = True
 
-    template_folder = os.path.join(template_path, "./column/_template")
-    destination_folder = os.path.join(os.getcwd(), "column", plugin_name)
+    template_folder = os.path.join(template_path, "./plugins/column/_template")
+    destination_folder = os.path.join(os.getcwd(), "./plugins/column", plugin_name)
     
     copy_template(template_folder, destination_folder)
     remove_unwanted_files(destination_folder, choice, include_configuration)
