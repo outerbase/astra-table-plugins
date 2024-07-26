@@ -1,5 +1,5 @@
 {
-    "name": "foreign-key-plugin",
+    "name": "outerbase-plugin",
     "version": "1.0.0",
     "description": "",
     "main": "dist/bundle.js",

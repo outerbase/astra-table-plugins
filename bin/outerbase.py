@@ -11,16 +11,20 @@ def copy_template(template_folder, destination_folder):
     except Exception as e:
         print(f"Error copying template: {e}")
 
-def remove_unwanted_files(destination_folder, selected_option):
+def remove_unwanted_files(destination_folder, selected_option, include_configuration):
     files_to_keep = {
         1: ["cell.js"],
-        2: ["cell_accessory.js"],
-        3: ["cell.js", "cell_accessory.js"],
-        4: ["cell.js", "cell_accessory.js", "editor.js"],
-        5: ["cell_accessory.js", "editor.js"]
+        2: ["cell-accessory.js"],
+        3: ["cell.js", "cell-accessory.js"],
+        4: ["cell.js", "cell-accessory.js", "editor.js"],
+        5: ["cell-accessory.js", "editor.js"]
     }
 
-    all_files = ["cell.js", "cell_accessory.js", "configuration.js", "editor.js"]
+    if include_configuration:
+        for key in files_to_keep:
+            files_to_keep[key].append("configuration.js")
+
+    all_files = ["cell.js", "cell-accessory.js", "configuration.js", "editor.js"]
     files_to_remove = [f for f in all_files if f not in files_to_keep[selected_option]]
 
     for file in files_to_remove:
@@ -29,39 +33,43 @@ def remove_unwanted_files(destination_folder, selected_option):
             os.remove(file_path)
             print(f"Removed {file_path}")
 
-def edit_index_js(destination_folder, plugin_id, selected_option):
+def edit_index_js(destination_folder, plugin_id, selected_option, include_configuration):
     index_file_path = os.path.join(destination_folder, "src", "index.js")
     
     import_lines = {
         1: "import { OuterbasePluginCell_$PLUGIN_ID } from './views/cell.js';\n",
-        2: "import { OuterbasePluginCellAccessory_$PLUGIN_ID } from './views/cell_accessory.js';\n",
-        4: "import { OuterbasePluginEditor_$PLUGIN_ID } from './views/editor.js';\n"
+        2: "import { OuterbasePluginCellAccessory_$PLUGIN_ID } from './views/cell-accessory.js';\n",
+        4: "import { OuterbasePluginEditor_$PLUGIN_ID } from './views/editor.js';\n",
+        6: "import { OuterbasePluginConfiguration_$PLUGIN_ID } from './views/configuration.js';\n"
     }
     
     define_lines = {
         1: "window.customElements.define('outerbase-plugin-cell-$PLUGIN_ID', OuterbasePluginCell_$PLUGIN_ID);\n",
         2: "window.customElements.define('outerbase-plugin-cell-accessory-$PLUGIN_ID', OuterbasePluginCellAccessory_$PLUGIN_ID);\n",
-        4: "window.customElements.define('outerbase-plugin-editor-$PLUGIN_ID', OuterbasePluginEditor_$PLUGIN_ID);\n"
+        4: "window.customElements.define('outerbase-plugin-editor-$PLUGIN_ID', OuterbasePluginEditor_$PLUGIN_ID);\n",
+        6: "window.customElements.define('outerbase-plugin-configuration-$PLUGIN_ID', OuterbasePluginConfiguration_$PLUGIN_ID);\n"
     }
 
     imports_to_write = ""
     defines_to_write = ""
     
     if selected_option in [1, 3, 4]:
-        imports_to_write += import_lines[1]#.replace("$PLUGIN_ID", plugin_id)
-        defines_to_write += define_lines[1]#.replace("$PLUGIN_ID", plugin_id)
+        imports_to_write += import_lines[1]
+        defines_to_write += define_lines[1]
     if selected_option in [2, 3, 4, 5]:
-        imports_to_write += import_lines[2]#.replace("$PLUGIN_ID", plugin_id)
-        defines_to_write += define_lines[2]#.replace("$PLUGIN_ID", plugin_id)
+        imports_to_write += import_lines[2]
+        defines_to_write += define_lines[2]
     if selected_option in [4, 5]:
-        imports_to_write += import_lines[4]#.replace("$PLUGIN_ID", plugin_id)
-        defines_to_write += define_lines[4]#.replace("$PLUGIN_ID", plugin_id)
+        imports_to_write += import_lines[4]
+        defines_to_write += define_lines[4]
+    if include_configuration:
+        imports_to_write += import_lines[6]
+        defines_to_write += define_lines[6]
 
     with open(index_file_path, "w") as f:
         f.write(imports_to_write + "\n" + defines_to_write)
 
     print(f"Edited index.js for plugin ID: {plugin_id}")
-
 
 def create_plugin(template_path):
     options = [
@@ -90,12 +98,17 @@ def create_plugin(template_path):
     plugin_name = input(f"Enter the name for your {plugin_type} plugin: ").strip()
     plugin_id = plugin_name.replace(" ", "_")
 
+    include_configuration = False
+    config_response = input("Will your plugin require user configuration to use? Y/N: ").strip().upper()
+    if config_response == 'Y':
+        include_configuration = True
+
     template_folder = os.path.join(template_path, "./column/_template")
     destination_folder = os.path.join(os.getcwd(), "column", plugin_name)
     
     copy_template(template_folder, destination_folder)
-    remove_unwanted_files(destination_folder, choice)
-    edit_index_js(destination_folder, plugin_id, choice)
+    remove_unwanted_files(destination_folder, choice, include_configuration)
+    edit_index_js(destination_folder, plugin_id, choice, include_configuration)
 
 def main():
     parser = argparse.ArgumentParser(prog='outerbase')
