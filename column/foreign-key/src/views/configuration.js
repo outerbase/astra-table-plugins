@@ -2,7 +2,6 @@ import {
     OuterbasePluginConfig_$PLUGIN_ID,
     privileges_$PLUGIN_ID,
     OuterbaseEvent_$PLUGIN_ID,
-    OuterbaseColumnEvent_$PLUGIN_ID,
     triggerEvent_$PLUGIN_ID,
     decodeAttributeByName_$PLUGIN_ID 
 } from '../utils.js';
@@ -132,7 +131,6 @@ export class OuterbasePluginConfiguration_$PLUGIN_ID extends HTMLElement {
             }).then(response => response.json()).then(data => {
                 const item = data.response?.items?.[0] ?? {}
                 const keys = Object.keys(item)
-                // console.log('First Row Keys: ', keys)
 
                 // Add a new `option` in the `select` for each keys object
                 let select = this.shadow.querySelector('select')
