@@ -1,9 +1,6 @@
 import { 
     OuterbasePluginConfig_$PLUGIN_ID,
     privileges_$PLUGIN_ID,
-    OuterbaseEvent_$PLUGIN_ID,
-    OuterbaseColumnEvent_$PLUGIN_ID,
-    triggerEvent_$PLUGIN_ID,
     decodeAttributeByName_$PLUGIN_ID 
 } from '../utils.js';
 

@@ -1,0 +1,14 @@
+{
+    "name": "astra-table-plugins",
+    "version": "1.0.0",
+    "description": "CLI tool for creating plugins",
+    "main": "index.js",
+    "scripts": {
+        "install-cli": "chmod +x ./bin/outerbase.py && cp ./bin/outerbase.py /usr/local/bin/outerbase && export OUTERBASE_PLUGIN_TEMPLATE_PATH=$(pwd)",
+        "cli-plugin-create": "outerbase plugin create"
+    },
+    "keywords": [],
+    "author": "Outerbase, Inc.",
+    "license": "ISC"
+  }
+  
