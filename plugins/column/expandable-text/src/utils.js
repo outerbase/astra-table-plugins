@@ -13,7 +13,8 @@ export const privileges_$PLUGIN_ID = [
     "tableSchemaValue",
     "databaseSchemaValue",
     "configuration",
-    "metadata"
+    "metadata",
+    "ishoveringcell",
 ];
 
 export const OuterbaseEvent_$PLUGIN_ID = {

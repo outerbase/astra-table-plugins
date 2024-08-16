@@ -8,10 +8,6 @@ var templateEditor_$PLUGIN_ID = document.createElement("template");
 templateEditor_$PLUGIN_ID.innerHTML = `
 <style>
     #container {
-        position: absolute;
-        left: 0;
-        transform: translateY(4px);
-        margin-top: 4px;
         width: 360px;
         height: 368px;
         border: 1px solid #e5e5e5;
