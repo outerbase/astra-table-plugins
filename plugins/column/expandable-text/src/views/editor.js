@@ -200,6 +200,12 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
         })
     }
 
+    disconnectedCallback() {
+        this.shadow.querySelector('textarea').removeEventListener('input')
+        this.shadow.querySelector('#update-button').removeEventListener('click')
+        this.shadow.querySelector('#cancel-button').removeEventListener('click')
+    }
+
     render() {
         // Get the `cellValue` and populate it in the `textarea`
         let cellValue = this.getAttribute('cellvalue')

@@ -177,6 +177,10 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
         this.loadForeignRow();
     }
 
+    disconnectedCallback() {
+        this.shadow.querySelector('#view-table').removeEventListener('click')
+    }
+
     async loadForeignRow() {
         const column = this.getAttribute('columnName')
         const table = JSON.parse(this.getAttribute('tableSchemaValue')).name

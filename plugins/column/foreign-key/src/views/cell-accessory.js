@@ -75,6 +75,10 @@ export class OuterbasePluginCellAccessory_$PLUGIN_ID extends HTMLElement {
         })
     }
 
+    disconnectedCallback() {
+        this.shadow.querySelector('#container').removeEventListener('click')
+    }
+
     async attributeChangedCallback(name, oldValue, newValue) {
         this.config = new OuterbasePluginConfig_$PLUGIN_ID(decodeAttributeByName_$PLUGIN_ID(this, "configuration"))
 
