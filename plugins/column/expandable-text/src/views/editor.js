@@ -129,6 +129,11 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
 
         this.shadow = this.attachShadow({ mode: "open" })
         this.shadow.appendChild(templateEditor_$PLUGIN_ID.content.cloneNode(true))
+
+        // Bind event handler functions
+        this.handleInput = this.handleInput.bind(this);
+        this.handleUpdateClick = this.handleUpdateClick.bind(this);
+        this.handleCancelClick = this.handleCancelClick.bind(this);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -157,53 +162,60 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
         this.maximumCharacterCount = column?.character_maximum_length || null
         this.updateCharacterCount()
 
-        // Listen to input changes in textarea
-        this.shadow.querySelector('textarea').addEventListener('input', (event) => {
-            const cellValue = event.target.value
-
-            if (cellValue.length === 0 || (cellValue && cellValue.toLowerCase() === "null")) {
-                this.shadow.querySelector('#null-placeholder').style.display = "block"
-            } else {
-                this.shadow.querySelector('#null-placeholder').style.display = "none"
-            }
-
-            this.updateCharacterCount()
-        })
-        
-        // Listen to `update-button` and `cancel-button` clicks
-        this.shadow.querySelector('#update-button').addEventListener('click', () => {
-            // Get value of textarea
-            let value = this.shadow.querySelector('textarea').value
-
-            triggerEvent_$PLUGIN_ID(this, {
-                action: "updatecell",
-                value,
-            })
-
-            triggerEvent_$PLUGIN_ID(this, {
-                action: "onstopedit"
-            })
-
-            // Close the editor after event has saved changes
-            setTimeout(() => {
-                triggerEvent_$PLUGIN_ID(this, {
-                    action: "onstopedit"
-                })
-            }, 500);
-        })
-
-        this.shadow.querySelector('#cancel-button').addEventListener('click', () => {
-            triggerEvent_$PLUGIN_ID(this, {
-                action: "oncanceledit",
-                value: true,
-            })
-        })
+        // Add event listeners
+        this.shadow.querySelector('textarea').addEventListener('input', this.handleInput);
+        this.shadow.querySelector('#update-button').addEventListener('click', this.handleUpdateClick);
+        this.shadow.querySelector('#cancel-button').addEventListener('click', this.handleCancelClick);
     }
 
     disconnectedCallback() {
-        this.shadow.querySelector('textarea').removeEventListener('input')
-        this.shadow.querySelector('#update-button').removeEventListener('click')
-        this.shadow.querySelector('#cancel-button').removeEventListener('click')
+        this.shadow.querySelector('textarea').removeEventListener('input', this.handleInput);
+        this.shadow.querySelector('#update-button').removeEventListener('click', this.handleUpdateClick);
+        this.shadow.querySelector('#cancel-button').removeEventListener('click', this.handleCancelClick);
+    }
+
+    handleInput(event) {
+        const cellValue = event.target.value;
+
+        if (cellValue.length === 0 || (cellValue && cellValue.toLowerCase() === "null")) {
+            this.shadow.querySelector('#null-placeholder').style.display = "block";
+        } else {
+            this.shadow.querySelector('#null-placeholder').style.display = "none";
+        }
+
+        this.updateCharacterCount();
+    }
+
+    handleUpdateClick() {
+        // Get value of textarea
+        let value = this.shadow.querySelector('textarea').value;
+
+        triggerEvent_$PLUGIN_ID(this, {
+            action: "updatecell",
+            value,
+        });
+
+        triggerEvent_$PLUGIN_ID(this, {
+            action: "onstopedit"
+        });
+
+        // Close the editor after event has saved changes
+        // Sometimes the event above does not trigger due
+        // to what appears to be a race condition, so for
+        // worst case scneario we do another call with a
+        // slight delay.
+        setTimeout(() => {
+            triggerEvent_$PLUGIN_ID(this, {
+                action: "onstopedit"
+            });
+        }, 500);
+    }
+
+    handleCancelClick() {
+        triggerEvent_$PLUGIN_ID(this, {
+            action: "oncanceledit",
+            value: true,
+        });
     }
 
     render() {
@@ -212,7 +224,6 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
         this.shadow.querySelector('textarea').value = cellValue
 
         if (cellValue.length === 0 || (cellValue && cellValue.toLowerCase() === "null")) {
-            // this.shadow.querySelector('textarea').placeholder = "NULL"
             this.shadow.querySelector('textarea').value = ""
             this.shadow.querySelector('#null-placeholder').style.display = "block"
         } else {

@@ -157,29 +157,30 @@ export class OuterbasePluginEditor_$PLUGIN_ID extends HTMLElement {
     }
     
     connectedCallback() {
-        this.shadow.querySelector('#view-table').addEventListener('click', () => {
-            console.log('Plugin wants to open a tab....')
-            const event = new CustomEvent("table-tab-open-event", {
-                detail: {
-                    schema: this.fkSchema,
-                    table: this.fkTable,
-                    filter: {
-                        [this.fkName]: this.getAttribute('cellValue')
-                    }
-                },
-                bubbles: true,
-                composed: true
-            });
-        
-            this.dispatchEvent(event);
-        })
-
+        this.shadow.querySelector('#view-table').addEventListener('click', this.handleClick);
         this.loadForeignRow();
     }
 
     disconnectedCallback() {
-        this.shadow.querySelector('#view-table').removeEventListener('click')
+        this.shadow.querySelector('#view-table').removeEventListener('click', this.handleClick);
     }
+
+    handleClick() {
+        const event = new CustomEvent("table-tab-open-event", {
+            detail: {
+                schema: this.fkSchema,
+                table: this.fkTable,
+                filter: {
+                    [this.fkName]: this.getAttribute('cellValue')
+                }
+            },
+            bubbles: true,
+            composed: true
+        });
+    
+        this.dispatchEvent(event);
+    }
+
 
     async loadForeignRow() {
         const column = this.getAttribute('columnName')

@@ -1,7 +1,5 @@
 import {
     decodeAttributeByName_$PLUGIN_ID,
-    OuterbaseColumnEvent_$PLUGIN_ID,
-    OuterbaseEvent_$PLUGIN_ID,
     OuterbasePluginConfig_$PLUGIN_ID,
     privileges_$PLUGIN_ID,
     triggerEvent_$PLUGIN_ID
@@ -65,18 +63,20 @@ export class OuterbasePluginCellAccessory_$PLUGIN_ID extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" })
         this.shadow.appendChild(templateCellAccessory_$PLUGIN_ID.content.cloneNode(true))
     }
-    
+
     connectedCallback() {
-        this.shadow.querySelector('#container').addEventListener('click', () => {
-            triggerEvent_$PLUGIN_ID(this, {
-                action: "onedit",
-                value: true,
-            })
-        })
+        this.shadow.querySelector('#container').addEventListener('click', this.handleClick);
     }
 
     disconnectedCallback() {
-        this.shadow.querySelector('#container').removeEventListener('click')
+        this.shadow.querySelector('#container').removeEventListener('click', this.handleClick);
+    }
+
+    handleClick() {
+        triggerEvent_$PLUGIN_ID(this, {
+            action: "onedit",
+            value: true,
+        });
     }
 
     async attributeChangedCallback(name, oldValue, newValue) {
