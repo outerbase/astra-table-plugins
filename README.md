@@ -6,3 +6,9 @@ Source code examples of plugins for the Astra UI table component
 ```
 sudo npm run install-cli
 ```
+
+## Create new plugin via CLI
+
+```
+outerbase plugin create
+```

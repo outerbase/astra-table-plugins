@@ -4,6 +4,14 @@ import os
 import shutil
 import argparse
 
+def set_template_path():
+    template_path = os.getenv('OUTERBASE_PLUGIN_TEMPLATE_PATH')
+    if not template_path:
+        # Automatically set the template path to the current working directory
+        template_path = os.getcwd()
+        os.environ['OUTERBASE_PLUGIN_TEMPLATE_PATH'] = template_path
+    return template_path
+
 def copy_template(template_folder, destination_folder):
     try:
         shutil.copytree(template_folder, destination_folder)
@@ -121,10 +129,7 @@ def main():
     create_parser.set_defaults(func=create_plugin)
     
     args = parser.parse_args()
-    template_path = os.getenv('OUTERBASE_PLUGIN_TEMPLATE_PATH')
-    if not template_path:
-        print("OUTERBASE_PLUGIN_TEMPLATE_PATH environment variable is not set.")
-        return
+    template_path = set_template_path()  # Set or get the template path here
 
     args.func(template_path)
 
